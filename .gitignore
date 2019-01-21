@@ -1,0 +1,13 @@
+# UE generated files #
+
+*/Build
+*/Binaries
+*/DerivedDataCache
+*/Intermediate
+*/Saved
+Escape/Content/StarterContent/
+
+# VS generated files #
+
+*.VC.db
+
