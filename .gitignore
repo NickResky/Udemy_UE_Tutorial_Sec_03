@@ -6,6 +6,7 @@
 */Intermediate
 */Saved
 Escape/Content/StarterContent/
+*_BuildData.uasset
 
 # VS generated files #
 
@@ -13,3 +14,5 @@ Escape/Content/StarterContent/
 *.suo
 *.VC.opendb
 *.sln
+Escape/.vs/*
+
