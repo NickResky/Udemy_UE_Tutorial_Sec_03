@@ -26,6 +26,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
 private:
 	APlayerController* PlayerController;
 
@@ -35,6 +36,8 @@ private:
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 	UInputComponent* InputComponent = nullptr;
 
+	FVector GetLineTraceEnd();
+	FVector GetLineTraceStart();
 	void SetupInputComponent();
 	void FindPhysicsHandleComponent();
 	void Grab();
