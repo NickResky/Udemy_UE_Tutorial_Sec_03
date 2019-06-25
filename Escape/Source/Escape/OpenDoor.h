@@ -22,6 +22,7 @@ protected:
 
 	void OpenDoor();
 	void CloseDoor();
+	float GetTotalMassOfActorsOnPlate();
 
 public:	
 	// Called every frame
