@@ -31,15 +31,12 @@ void UOpenDoor::BeginPlay()
 void UOpenDoor::OpenDoor()
 {
 	FRotator NewRotation = FRotator(0.f, -OpenAngle, 0.f);
-
 	Owner->SetActorRotation(NewRotation);
 }
 
 void UOpenDoor::CloseDoor()
 {
-
 	FRotator NewRotation = FRotator(0.f, 0.f, 0.f);
-
 	Owner->SetActorRotation(NewRotation);
 }
 
@@ -62,6 +59,10 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+	if (!Owner || !ActorThatOpens) {
+		return;
+	}
 
 	if (GetTotalMassOfActorsOnPlate() >= 50.f) {
 		OpenDoor();

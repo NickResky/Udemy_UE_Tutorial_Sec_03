@@ -29,7 +29,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	AActor* Owner;
+	AActor* Owner =  nullptr;
 
 	UPROPERTY(EditAnywhere)
 	float OpenAngle = 70.f;

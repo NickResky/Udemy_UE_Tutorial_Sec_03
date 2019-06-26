@@ -27,6 +27,9 @@ void UGrabber::BeginPlay()
 
 	UE_LOG(LogTemp, Warning, TEXT("Grabber reporting for duty!"));
 	PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) {
+		UE_LOG(LogTemp, Error, TEXT("PlayerController not found on %s"), *(GetOwner()->GetName()));
+	}
 
 	FindPhysicsHandleComponent();
 	SetupInputComponent();
@@ -48,6 +51,10 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	//	10.f
 	//);
 
+	if (!PhysicsHandle) {
+		return;
+	}
+
 	if (PhysicsHandle->GrabbedComponent) {
 		PhysicsHandle->SetTargetLocation(GetLineTraceEnd());
 	}
@@ -57,10 +64,12 @@ FVector UGrabber::GetLineTraceEnd()
 {
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
-	PlayerController->GetPlayerViewPoint(
-		OUT PlayerViewPointLocation,
-		OUT PlayerViewPointRotation);
-
+	
+	if (PlayerController) {
+		PlayerController->GetPlayerViewPoint(
+			OUT PlayerViewPointLocation,
+			OUT PlayerViewPointRotation);
+	}
 	FVector LineTraceEnd = PlayerViewPointLocation + (PlayerViewPointRotation.Vector() * Reach);
 	return LineTraceEnd;
 }
@@ -69,10 +78,12 @@ FVector UGrabber::GetLineTraceStart()
 {
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
-	PlayerController->GetPlayerViewPoint(
-		OUT PlayerViewPointLocation,
-		OUT PlayerViewPointRotation);
-
+	if (PlayerController) {
+		PlayerController->GetPlayerViewPoint(
+			OUT PlayerViewPointLocation,
+			OUT PlayerViewPointRotation
+		);
+	}
 	return PlayerViewPointLocation;
 }
 
@@ -80,7 +91,7 @@ FVector UGrabber::GetLineTraceStart()
 void UGrabber::SetupInputComponent()
 {
 	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
-	if (InputComponent) {
+	if (InputComponent && PhysicsHandle) {
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
 	}
@@ -94,6 +105,7 @@ void UGrabber::FindPhysicsHandleComponent()
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	if (!PhysicsHandle) {
 		UE_LOG(LogTemp, Error, TEXT("PhysicsHandleComponent not found on %s"), *(GetOwner()->GetName()));
+		return;
 	}
 }
 
