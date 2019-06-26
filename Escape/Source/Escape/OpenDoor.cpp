@@ -25,7 +25,14 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = GetOwner();
-	
+
+	if (!Owner) {
+		UE_LOG(LogTemp, Error, TEXT("Owner not found on %s"), *(GetOwner()->GetName()));
+	}
+
+	if (!PressurePlate) {
+		UE_LOG(LogTemp, Error, TEXT("Pressure plate not found on %s"), *(GetOwner()->GetName()));
+	}
 }
 
 void UOpenDoor::OpenDoor()
@@ -43,6 +50,9 @@ void UOpenDoor::CloseDoor()
 float UOpenDoor::GetTotalMassOfActorsOnPlate()
 {
 	TArray<AActor*> OverlappingActors;
+	if (!PressurePlate) {
+		return 0.f;
+	}
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 
 	float TotalMass = 0.f;
@@ -58,9 +68,7 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
-
-	if (!Owner || !ActorThatOpens) {
+	if (!Owner) {
 		return;
 	}
 
